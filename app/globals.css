@@ -123,7 +123,19 @@ h1, h2, h3, h4, h5, h6 {
 /* Product grid: auto-fill → 1-col on mobile */
 .pg { display: grid; gap: 20px; }
 
+/* Nav logo: full size on desktop, smaller on mobile */
+.nav-logo { width: 64px; height: 64px; }
+/* Nav spacer matches nav height */
+.nav-spacer { height: 76px; }
+/* Mobile menu sits flush under nav */
+.mobile-menu-top { top: 76px; }
+
 @media (max-width: 768px) {
+  .nav-logo { width: 40px !important; height: 40px !important; }
+  .nav-spacer { height: 60px !important; }
+  .mobile-menu-top { top: 60px !important; }
+  .main-nav { padding: 10px 16px !important; }
+  .search-panel { padding: 76px 16px 16px !important; }
   /* Hero title font size */
   .ht { font-size: 38px !important; line-height: 1 !important; }
   /* Product grid: single column */

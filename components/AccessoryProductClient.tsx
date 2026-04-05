@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ACCESSORIES, type Accessory } from "@/lib/data";
 import { AccSVG } from "@/components/ScooterSVG";
@@ -17,6 +18,8 @@ interface Props {
 export function AccessoryProductClient({ accessory: acc, related }: Props) {
   const router = useRouter();
   const { addToCart } = useStore();
+
+  useEffect(() => { window.scrollTo(0, 0); }, []);
 
   const addCart = () => {
     addToCart({ id: String(acc.id), name: acc.name, price: acc.price, type: "accessory", slug: String(acc.id) });

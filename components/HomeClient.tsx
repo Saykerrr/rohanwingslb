@@ -152,12 +152,28 @@ export function HomeClient() {
   const [scootVisible, setScootVisible] = useState(8);
   const [accVisible, setAccVisible] = useState(8);
   const [showTop, setShowTop] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const { addToCart: storeAddToCart } = useStore();
 
   useEffect(() => {
     const h = () => setShowTop(window.scrollY > 500);
     window.addEventListener("scroll", h);
     return () => window.removeEventListener("scroll", h);
+  }, []);
+
+  // Force video play on mount and when page becomes visible again (mobile fix)
+  useEffect(() => {
+    const vid = videoRef.current;
+    if (!vid) return;
+    const tryPlay = () => { vid.play().catch(() => {}); };
+    tryPlay();
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") tryPlay();
+    });
+    window.addEventListener("focus", tryPlay);
+    return () => {
+      window.removeEventListener("focus", tryPlay);
+    };
   }, []);
 
   const addCart = (item: Scooter | Accessory) => {
@@ -197,6 +213,7 @@ export function HomeClient() {
       <section id="home" className="hp" style={{ minHeight: "90vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", textAlign: "center", position: "relative", padding: "140px 40px 80px", overflow: "hidden" }}>
         {/* Video background */}
         <video
+          ref={videoRef}
           autoPlay
           muted
           loop

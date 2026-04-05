@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ScooterSVG, AccSVG } from "@/components/ScooterSVG";
 import { useStore } from "@/lib/store";
@@ -21,6 +21,8 @@ export function ScooterProductClient({ scooter: p, related, accessories }: Props
   const [cmpSearch, setCmpSearch] = useState("");
   const { addToCart } = useStore();
   const router = useRouter();
+
+  useEffect(() => { window.scrollTo(0, 0); }, []);
 
   const specs = [
     { l: "Top Speed", v: p.speed }, { l: "Range", v: p.range }, { l: "Motor", v: p.motor },

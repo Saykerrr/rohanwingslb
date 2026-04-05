@@ -66,11 +66,11 @@ export function Navbar() {
   return (
     <>
       {/* NAV */}
-      <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: scrolled ? "rgba(255,255,255,.97)" : "#fff", backdropFilter: "blur(12px)", borderBottom: "1px solid #E5E7EB", transition: "all .3s", padding: "6px 16px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <nav className="main-nav" style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: scrolled ? "rgba(255,255,255,.97)" : "#fff", backdropFilter: "blur(12px)", borderBottom: "1px solid #E5E7EB", transition: "all .3s", padding: "6px 16px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         {/* Logo */}
-        <div onClick={() => { router.push("/"); window.scrollTo({ top: 0, behavior: "smooth" }); }} style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: 8 }}>
-          <Image src="/logo.png" alt="Rohan Wings" width={64} height={64} style={{ borderRadius: 4, display: "block" }} priority />
-          <div style={{ lineHeight: 1.1 }}>
+        <div onClick={() => { router.push("/"); window.scrollTo({ top: 0, behavior: "smooth" }); }} style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+          <Image src="/logo.png" alt="Rohan Wings" width={64} height={64} className="nav-logo" style={{ borderRadius: 4, display: "block" }} priority />
+          <div style={{ lineHeight: 1.1, whiteSpace: "nowrap" }}>
             <div style={{ fontFamily: F, fontWeight: 800, fontSize: 16, letterSpacing: 1.5, textTransform: "uppercase" }}>Rohan Wings</div>
             <div style={{ fontFamily: F, fontWeight: 600, fontSize: 10, color: "#DC2626", letterSpacing: 2, textTransform: "uppercase" }}>Lebanon</div>
           </div>
@@ -113,7 +113,7 @@ export function Navbar() {
 
       {/* Search bar */}
       {searchExpanded && (
-        <div style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 98, background: "#fff", borderBottom: "1px solid #E5E7EB", padding: "92px 16px 16px", boxShadow: "0 8px 30px rgba(0,0,0,.08)", animation: "slideDown .25s ease" }} onClick={e => e.stopPropagation()}>
+        <div className="search-panel" style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 98, background: "#fff", borderBottom: "1px solid #E5E7EB", padding: "92px 16px 16px", boxShadow: "0 8px 30px rgba(0,0,0,.08)", animation: "slideDown .25s ease" }} onClick={e => e.stopPropagation()}>
           <div style={{ maxWidth: 600, margin: "0 auto" }}>
             <div style={{ position: "relative" }}>
               <input ref={searchRef} autoFocus value={search}
@@ -156,7 +156,7 @@ export function Navbar() {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div style={{ position: "fixed", top: 76, left: 0, right: 0, zIndex: 99, background: "rgba(255,255,255,.98)", backdropFilter: "blur(20px)", padding: "16px 20px 24px", borderBottom: "1px solid #E5E7EB", display: "flex", flexDirection: "column", gap: 14, animation: "slideDown .2s ease" }} className="md:hidden" onClick={e => e.stopPropagation()}>
+        <div className="mobile-menu-top" style={{ position: "fixed", left: 0, right: 0, zIndex: 99, background: "rgba(255,255,255,.98)", backdropFilter: "blur(20px)", padding: "16px 20px 24px", borderBottom: "1px solid #E5E7EB", display: "flex", flexDirection: "column", gap: 14, animation: "slideDown .2s ease" }} onClick={e => e.stopPropagation()}>
           {/* Inline search in mobile menu */}
           <div style={{ position: "relative", marginBottom: 4 }}>
             <input
@@ -198,7 +198,7 @@ export function Navbar() {
       )}
 
       {/* Spacer for fixed nav */}
-      <div style={{ height: 76 }} />
+      <div className="nav-spacer" style={{ height: 76 }} />
     </>
   );
 }

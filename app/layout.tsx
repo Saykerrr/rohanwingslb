@@ -38,6 +38,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               boxShadow: "0 4px 20px rgba(220,38,38,.25)",
             },
             duration: 2200,
+            success: { icon: null },
+            error: { icon: null },
           }}
         />
       </body>

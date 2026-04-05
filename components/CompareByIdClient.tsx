@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { SCOOTERS } from "@/lib/data";
 import { ScooterSVG } from "@/components/ScooterSVG";
@@ -28,6 +28,8 @@ export function CompareByIdClient() {
   const params = useSearchParams();
   const router = useRouter();
   const { addToCart } = useStore();
+
+  useEffect(() => { window.scrollTo(0, 0); }, []);
 
   const aId = Number(params.get("a"));
   const bId = Number(params.get("b"));
