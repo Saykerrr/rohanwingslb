@@ -54,8 +54,8 @@ export function ScooterProductClient({ scooter: p, related, accessories }: Props
         <span style={{ color: "#DC2626", fontSize: 12, fontWeight: 600, fontFamily: F, letterSpacing: 1 }}>{p.name}</span>
       </div>
 
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "16px 32px 64px" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48, alignItems: "start" }}>
+      <div className="prod-wrap" style={{ maxWidth: 1100, margin: "0 auto", padding: "16px 32px 64px" }}>
+        <div className="prod-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48, alignItems: "start" }}>
           {/* Gallery */}
           <div>
             <div style={{ background: "#F9FAFB", borderRadius: 16, border: "1px solid #E5E7EB", height: 380, display: "flex", alignItems: "center", justifyContent: "center", position: "relative", overflow: "hidden" }}>
@@ -153,7 +153,7 @@ export function ScooterProductClient({ scooter: p, related, accessories }: Props
               </div>
 
               {/* Specs grid */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 1, background: "#E5E7EB", borderRadius: 12, overflow: "hidden" }}>
+              <div className="specs-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 1, background: "#E5E7EB", borderRadius: 12, overflow: "hidden" }}>
                 {specs.map(s => (
                   <div key={s.l} style={{ background: "#F9FAFB", padding: "12px 14px" }}>
                     <div style={{ fontSize: 10, color: "#999", textTransform: "uppercase", letterSpacing: 1, marginBottom: 3 }}>{s.l}</div>

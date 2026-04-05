@@ -156,7 +156,39 @@ export function Navbar() {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div style={{ position: "fixed", top: 76, left: 0, right: 0, zIndex: 99, background: "rgba(255,255,255,.98)", backdropFilter: "blur(20px)", padding: "16px 20px 24px", borderBottom: "1px solid #E5E7EB", display: "flex", flexDirection: "column", gap: 14 }} className="md:hidden" onClick={e => e.stopPropagation()}>
+        <div style={{ position: "fixed", top: 76, left: 0, right: 0, zIndex: 99, background: "rgba(255,255,255,.98)", backdropFilter: "blur(20px)", padding: "16px 20px 24px", borderBottom: "1px solid #E5E7EB", display: "flex", flexDirection: "column", gap: 14, animation: "slideDown .2s ease" }} className="md:hidden" onClick={e => e.stopPropagation()}>
+          {/* Inline search in mobile menu */}
+          <div style={{ position: "relative", marginBottom: 4 }}>
+            <input
+              value={search}
+              onChange={e => { setSearch(e.target.value); setSearchOpen(true); }}
+              onFocus={() => setSearchOpen(true)}
+              placeholder="Search scooters, accessories..."
+              style={{ width: "100%", padding: "10px 16px 10px 40px", borderRadius: 10, border: "1px solid #E5E7EB", fontSize: 16, outline: "none", background: "#F9FAFB", fontFamily: "'Inter',sans-serif" }}
+            />
+            <svg style={{ position: "absolute", left: 12, top: 11, opacity: .4 }} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#333" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            {searchOpen && searchResults.length > 0 && (
+              <div style={{ background: "#fff", border: "1px solid #E5E7EB", borderRadius: 10, marginTop: 4, maxHeight: 200, overflowY: "auto", boxShadow: "0 8px 24px rgba(0,0,0,.1)" }}>
+                {searchResults.slice(0, 4).map(r => {
+                  const isScooter = "motor" in r;
+                  return (
+                    <div key={r.id}
+                      onClick={() => { setSearch(""); setMenuOpen(false); setSearchOpen(false); router.push(`/${isScooter ? "scooters" : "accessories"}/${r.id}`); }}
+                      style={{ padding: "10px 14px", cursor: "pointer", borderBottom: "1px solid #F3F4F6", display: "flex", alignItems: "center", gap: 10 }}
+                    >
+                      <div style={{ width: 36, height: 26, flexShrink: 0 }}>
+                        {isScooter ? <ScooterSVG variant={r.id % 3} accent={(r as typeof SCOOTERS[0]).color} /> : <AccSVG type={r.cat} color={(r as typeof ACCESSORIES[0]).color} itemId={r.id} />}
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontWeight: 600, fontSize: 13, fontFamily: F }}>{r.name}</div>
+                      </div>
+                      <span style={{ fontSize: 12, color: "#DC2626", fontWeight: 700, fontFamily: F }}>${r.price}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
           {navItems.map(item => (
             <button key={item.label} onClick={item.action}
               style={{ color: "#333", fontSize: 15, fontWeight: 600, letterSpacing: 2, textTransform: "uppercase", fontFamily: F, background: "none", border: "none", cursor: "pointer", textAlign: "left" }}

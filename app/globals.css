@@ -114,8 +114,42 @@ h1, h2, h3, h4, h5, h6 {
   grid-template-columns: 2fr 1fr 1fr;
   gap: 32px;
 }
-@media (max-width: 640px) {
-  .footer-grid {
-    grid-template-columns: 1fr;
-  }
+
+/* ── Prototype responsive helpers ───────────────────────────── */
+/* Stats grid: 4-col → 2-col on mobile */
+.sg { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
+/* Branches grid: 3-col → 1-col on mobile */
+.bg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+/* Product grid: auto-fill → 1-col on mobile */
+.pg { display: grid; gap: 20px; }
+
+@media (max-width: 768px) {
+  /* Hero title font size */
+  .ht { font-size: 38px !important; line-height: 1 !important; }
+  /* Product grid: single column */
+  .pg { grid-template-columns: 1fr !important; }
+  /* Stats: 2 columns */
+  .sg { grid-template-columns: 1fr 1fr !important; padding: 24px 16px !important; }
+  /* Section padding: reduce horizontal */
+  .sp { padding: 48px 16px !important; }
+  /* Hero padding */
+  .hp { padding: 100px 16px 50px !important; }
+  /* Footer grid: stack */
+  .footer-grid { grid-template-columns: 1fr !important; }
+  /* Branches grid: stack */
+  .bg { grid-template-columns: 1fr !important; }
+  /* CTA banner padding */
+  .cta-banner { padding: 32px 20px !important; }
+  /* Section headings */
+  .section-h2 { font-size: 30px !important; }
+  /* Filter bar wrapping */
+  .filter-bar { gap: 6px !important; }
+  /* Scooter card spec grid stays 2-col but labels shrink */
+  .spec-grid { gap: 4px !important; }
+  /* Product detail page: stack gallery + info */
+  .prod-grid { grid-template-columns: 1fr !important; gap: 24px !important; }
+  /* Specs table on product page: 2 cols */
+  .specs-grid { grid-template-columns: 1fr 1fr !important; }
+  /* Product page padding */
+  .prod-wrap { padding: 16px !important; }
 }

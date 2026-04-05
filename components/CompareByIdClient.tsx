@@ -70,7 +70,7 @@ export function CompareByIdClient() {
 
   return (
     <div>
-      <div style={{ maxWidth: 1000, margin: "0 auto", padding: "32px" }}>
+      <div className="prod-wrap" style={{ maxWidth: 1000, margin: "0 auto", padding: "32px" }}>
         <button
           onClick={() => router.push(`/scooters/${a.id}`)}
           style={{ color: "#555", fontSize: 13, fontWeight: 600, letterSpacing: 2, textTransform: "uppercase", fontFamily: F, background: "none", border: "none", cursor: "pointer", marginBottom: 24, display: "inline-flex", alignItems: "center", gap: 6 }}

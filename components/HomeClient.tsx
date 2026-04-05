@@ -194,7 +194,7 @@ export function HomeClient() {
     <div style={{ background: "#fff", color: "#111", fontFamily: "'Inter',-apple-system,sans-serif", overflowX: "hidden" }}>
 
       {/* Hero */}
-      <section id="home" style={{ minHeight: "90vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", textAlign: "center", position: "relative", padding: "140px 40px 80px", overflow: "hidden" }}>
+      <section id="home" className="hp" style={{ minHeight: "90vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", textAlign: "center", position: "relative", padding: "140px 40px 80px", overflow: "hidden" }}>
         {/* Video background */}
         <video
           autoPlay
@@ -208,10 +208,10 @@ export function HomeClient() {
         {/* Overlay so text stays readable */}
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(255,255,255,.45) 0%,rgba(255,255,255,.75) 60%)", zIndex: 1 }} />
         <div style={{ position: "relative", zIndex: 2 }}>
-          <h1 style={{ fontSize: "clamp(42px,7vw,72px)", fontWeight: 800, lineHeight: .95, marginBottom: 20, fontFamily: F, textTransform: "uppercase", color: "#111" }}>
+          <h1 className="ht" style={{ fontSize: "clamp(38px,7vw,72px)", fontWeight: 800, lineHeight: .95, marginBottom: 20, fontFamily: F, textTransform: "uppercase", color: "#111" }}>
             Ride The <span style={{ color: "#DC2626" }}>Future</span>
           </h1>
-          <p style={{ fontSize: 18, color: "#666", maxWidth: 480, margin: "0 auto 36px", lineHeight: 1.6 }}>
+          <p style={{ fontSize: "clamp(15px,4vw,18px)", color: "#666", maxWidth: 480, margin: "0 auto 36px", lineHeight: 1.6 }}>
             Premium electric scooters, genuine parts, and expert service. Three branches across Lebanon.
           </p>
           <div style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap" }}>
@@ -237,7 +237,7 @@ export function HomeClient() {
 
       {/* Stats */}
       <section style={{ borderBottom: "1px solid #F3F4F6" }}>
-        <div style={{ maxWidth: 1100, margin: "0 auto", padding: "36px 32px", display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 32 }}>
+        <div className="sg" style={{ maxWidth: 1100, margin: "0 auto", padding: "36px 32px" }}>
           {[
             { n: "7,300+", l: "Instagram Followers" },
             { n: "3", l: "Branches in Lebanon" },
@@ -253,10 +253,10 @@ export function HomeClient() {
       </section>
 
       {/* Scooters */}
-      <section id="scooters" style={{ maxWidth: 1200, margin: "0 auto", padding: "80px 32px" }}>
+      <section id="scooters" className="sp" style={{ maxWidth: 1200, margin: "0 auto", padding: "80px 32px" }}>
         <div style={{ textAlign: "center", marginBottom: 40 }}>
           <span style={{ color: "#DC2626", fontSize: 12, fontWeight: 700, letterSpacing: 4, textTransform: "uppercase", fontFamily: F }}>Our Collection</span>
-          <h2 style={{ fontSize: 42, fontWeight: 800, fontFamily: F, marginTop: 6, textTransform: "uppercase" }}>Electric Scooters</h2>
+          <h2 className="section-h2" style={{ fontSize: 42, fontWeight: 800, fontFamily: F, marginTop: 6, textTransform: "uppercase" }}>Electric Scooters</h2>
         </div>
 
         {/* Category + Sort filters */}
@@ -276,7 +276,7 @@ export function HomeClient() {
         </div>
 
         {/* Scooter grid */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 20 }}>
+        <div className="pg" style={{ gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))" }}>
           {fScoot.slice(0, scootVisible).map((s, i) => (
             <Link key={s.id} href={`/scooters/${s.id}`} style={{ textDecoration: "none" }}>
               <div
@@ -334,10 +334,10 @@ export function HomeClient() {
 
       {/* Accessories */}
       <section id="accessories" style={{ background: "#F9FAFB", borderTop: "1px solid #F3F4F6", borderBottom: "1px solid #F3F4F6" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "80px 32px" }}>
+        <div className="sp" style={{ maxWidth: 1200, margin: "0 auto", padding: "80px 32px" }}>
           <div style={{ textAlign: "center", marginBottom: 40 }}>
             <span style={{ color: "#DC2626", fontSize: 12, fontWeight: 700, letterSpacing: 4, textTransform: "uppercase", fontFamily: F }}>Gear Up</span>
-            <h2 style={{ fontSize: 42, fontWeight: 800, fontFamily: F, marginTop: 6, textTransform: "uppercase" }}>Accessories & Parts</h2>
+            <h2 className="section-h2" style={{ fontSize: 42, fontWeight: 800, fontFamily: F, marginTop: 6, textTransform: "uppercase" }}>Accessories & Parts</h2>
           </div>
           <div style={{ display: "flex", gap: 8, justifyContent: "center", alignItems: "center", marginBottom: 24, flexWrap: "wrap" }}>
             {["All", "Protection", "Gear", "Parts"].map(c => (
@@ -348,7 +348,7 @@ export function HomeClient() {
             <div style={{ width: 1, height: 24, background: "#E5E7EB", margin: "0 4px" }}/>
             <SortDD value={accSort} onChange={setAccSort} />
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(250px,1fr))", gap: 16 }}>
+          <div className="pg" style={{ gridTemplateColumns: "repeat(auto-fill,minmax(250px,1fr))", gap: 16 }}>
             {fAcc.slice(0, accVisible).map((a, i) => (
               <Link key={a.id} href={`/accessories/${a.id}`} style={{ textDecoration: "none" }}>
                 <div
@@ -395,9 +395,9 @@ export function HomeClient() {
       </section>
 
       {/* About */}
-      <section id="about" style={{ maxWidth: 800, margin: "0 auto", padding: "80px 32px", textAlign: "center" }}>
+      <section id="about" className="sp" style={{ maxWidth: 800, margin: "0 auto", padding: "80px 32px", textAlign: "center" }}>
         <span style={{ color: "#DC2626", fontSize: 12, fontWeight: 700, letterSpacing: 4, textTransform: "uppercase", fontFamily: F }}>Who We Are</span>
-        <h2 style={{ fontSize: 42, fontWeight: 800, fontFamily: F, marginTop: 6, textTransform: "uppercase" }}>About Rohan Wings</h2>
+        <h2 className="section-h2" style={{ fontSize: 42, fontWeight: 800, fontFamily: F, marginTop: 6, textTransform: "uppercase" }}>About Rohan Wings</h2>
         <p style={{ color: "#555", fontSize: 16, lineHeight: 1.8, marginTop: 20 }}>Rohan Wings is Lebanon's trusted destination for premium electric scooters, genuine replacement parts, and professional service. With three branches across the country, we are committed to making electric mobility accessible, reliable, and exciting.</p>
         <p style={{ color: "#888", fontSize: 15, lineHeight: 1.8, marginTop: 14, marginBottom: 32 }}>Whether you are a daily commuter, a weekend explorer, or a business looking for wholesale options, our team is here to match you with the perfect ride and keep it running at peak performance.</p>
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
@@ -409,22 +409,22 @@ export function HomeClient() {
 
       {/* FAQ */}
       <section id="faq" style={{ background: "#F9FAFB", borderTop: "1px solid #F3F4F6", borderBottom: "1px solid #F3F4F6" }}>
-        <div style={{ maxWidth: 700, margin: "0 auto", padding: "80px 32px" }}>
+        <div className="sp" style={{ maxWidth: 700, margin: "0 auto", padding: "80px 32px" }}>
           <div style={{ textAlign: "center", marginBottom: 40 }}>
             <span style={{ color: "#DC2626", fontSize: 12, fontWeight: 700, letterSpacing: 4, textTransform: "uppercase", fontFamily: F }}>Support</span>
-            <h2 style={{ fontSize: 42, fontWeight: 800, fontFamily: F, marginTop: 6, textTransform: "uppercase" }}>FAQ</h2>
+            <h2 className="section-h2" style={{ fontSize: 42, fontWeight: 800, fontFamily: F, marginTop: 6, textTransform: "uppercase" }}>FAQ</h2>
           </div>
           {FAQS.map((f, i) => <FAQItem key={i} faq={f} />)}
         </div>
       </section>
 
       {/* Contact */}
-      <section id="contact" style={{ maxWidth: 1100, margin: "0 auto", padding: "80px 32px" }}>
+      <section id="contact" className="sp" style={{ maxWidth: 1100, margin: "0 auto", padding: "80px 32px" }}>
         <div style={{ textAlign: "center", marginBottom: 48 }}>
           <span style={{ color: "#DC2626", fontSize: 12, fontWeight: 700, letterSpacing: 4, textTransform: "uppercase", fontFamily: F }}>Get In Touch</span>
-          <h2 style={{ fontSize: 42, fontWeight: 800, fontFamily: F, marginTop: 6, textTransform: "uppercase" }}>Our Branches</h2>
+          <h2 className="section-h2" style={{ fontSize: 42, fontWeight: 800, fontFamily: F, marginTop: 6, textTransform: "uppercase" }}>Our Branches</h2>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 20, marginBottom: 48 }}>
+        <div className="bg" style={{ marginBottom: 48 }}>
           {BRANCHES.map((b, i) => (
             <div key={i} style={{ background: "#F9FAFB", border: "1px solid #E5E7EB", borderRadius: 16, padding: 28, textAlign: "center" }}>
               <div style={{ width: 48, height: 48, borderRadius: 12, margin: "0 auto 14px", background: "#FEF2F2", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -450,7 +450,7 @@ export function HomeClient() {
         </div>
 
         {/* CTA */}
-        <div style={{ background: "linear-gradient(135deg,#DC2626,#991B1B)", borderRadius: 20, padding: "44px 36px", textAlign: "center", position: "relative", overflow: "hidden" }}>
+        <div className="cta-banner" style={{ background: "linear-gradient(135deg,#DC2626,#991B1B)", borderRadius: 20, padding: "44px 36px", textAlign: "center", position: "relative", overflow: "hidden" }}>
           <div style={{ position: "relative", zIndex: 1 }}>
             <h3 style={{ fontSize: 28, fontWeight: 800, fontFamily: F, marginBottom: 10, textTransform: "uppercase", color: "#fff" }}>Ready to Ride?</h3>
             <p style={{ fontSize: 15, color: "rgba(255,255,255,.85)", marginBottom: 24 }}>Visit any branch or message us on WhatsApp to find your perfect scooter.</p>

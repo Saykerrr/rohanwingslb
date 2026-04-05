@@ -30,7 +30,7 @@ export function AccessoryProductClient({ accessory: acc, related }: Props) {
 
   return (
     <div style={{ background: "#fff", minHeight: "100vh" }}>
-      <div style={{ maxWidth: 1000, margin: "0 auto", padding: "32px" }}>
+      <div className="prod-wrap" style={{ maxWidth: 1000, margin: "0 auto", padding: "32px" }}>
 
         {/* Back */}
         <button
