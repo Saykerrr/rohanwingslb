@@ -44,7 +44,7 @@ export function Footer() {
             <div key={s} style={{ marginBottom: 6 }}>
               <button
                 onClick={() => scrollTo(s.toLowerCase())}
-                style={{ fontSize: 13, color: "#888", background: "none", border: "none", cursor: "pointer", padding: 0, fontFamily: "Inter, sans-serif", transition: "color .2s" }}
+                style={{ fontSize: 13, color: "#888", background: "none", border: "none", cursor: "pointer", padding: 0, fontFamily: F, fontWeight: 600, letterSpacing: 2, textTransform: "uppercase", transition: "color .2s" }}
                 onMouseEnter={e => (e.currentTarget.style.color = "#fff")}
                 onMouseLeave={e => (e.currentTarget.style.color = "#888")}
               >

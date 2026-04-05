@@ -56,7 +56,7 @@ export function ScooterProductClient({ scooter: p, related, accessories }: Props
         <span style={{ color: "#DC2626", fontSize: 12, fontWeight: 600, fontFamily: F, letterSpacing: 1 }}>{p.name}</span>
       </div>
 
-      <div className="prod-wrap" style={{ maxWidth: 1100, margin: "0 auto", padding: "16px 32px 64px" }}>
+      <div className="prod-wrap" style={{ maxWidth: 1100, margin: "0 auto", padding: "0 32px 64px" }}>
         <div className="prod-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48, alignItems: "start" }}>
           {/* Gallery */}
           <div>

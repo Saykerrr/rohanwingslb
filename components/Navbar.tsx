@@ -77,7 +77,7 @@ export function Navbar() {
         </div>
 
         {/* Desktop nav */}
-        <div style={{ display: "flex", gap: 24, alignItems: "center" }} className="hidden md:flex">
+        <div className="hidden md:flex" style={{ gap: 24, alignItems: "center" }}>
           {navItems.map(item => (
             <button key={item.label} onClick={item.action}
               style={{ color: "#555", fontSize: 13, fontWeight: 600, letterSpacing: 2, textTransform: "uppercase", fontFamily: F, background: "none", border: "none", cursor: "pointer", transition: "color .3s" }}

@@ -162,6 +162,6 @@ h1, h2, h3, h4, h5, h6 {
   .prod-grid { grid-template-columns: 1fr !important; gap: 24px !important; }
   /* Specs table on product page: 2 cols */
   .specs-grid { grid-template-columns: 1fr 1fr !important; }
-  /* Product page padding */
-  .prod-wrap { padding: 16px !important; }
+  /* Product page padding: no top padding (breadcrumb above provides spacing) */
+  .prod-wrap { padding: 0 16px 48px !important; }
 }
