@@ -152,6 +152,8 @@ export function HomeClient() {
   const [scootVisible, setScootVisible] = useState(8);
   const [accVisible, setAccVisible] = useState(8);
   const [showTop, setShowTop] = useState(false);
+  const [openCardId, setOpenCardId] = useState<string | null>(null);
+  const [cardColor, setCardColor] = useState("");
   const videoRef = useRef<HTMLVideoElement>(null);
   const { addToCart: storeAddToCart } = useStore();
 
@@ -176,15 +178,21 @@ export function HomeClient() {
     };
   }, []);
 
-  const addCart = (item: Scooter | Accessory) => {
+  const addCart = (item: Scooter | Accessory, color?: string) => {
     storeAddToCart({
       id: String(item.id),
       name: item.name,
       price: item.price,
       type: "motor" in item ? "scooter" : "accessory",
       slug: item.name.toLowerCase().replace(/\s+/g, "-"),
+      color: color || undefined,
     });
-    toast.success(`${item.name} added to cart`);
+    toast.success(`${item.name}${color ? ` (${color})` : ""} added to cart`);
+  };
+
+  const openPicker = (cardId: string, firstColor: string) => {
+    setCardColor(firstColor);
+    setOpenCardId(cardId);
   };
 
   const doSort = (items: (Scooter | Accessory)[], s: string) => {
@@ -326,15 +334,37 @@ export function HomeClient() {
                       </div>
                     ))}
                   </div>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                    <div style={{ fontSize: 24, fontWeight: 800, fontFamily: F }}>${s.price}</div>
-                    <button
-                      style={{ background: "#DC2626", color: "#fff", border: "none", borderRadius: 10, padding: "8px 18px", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: F, letterSpacing: 1, textTransform: "uppercase", transition: "all .3s" }}
-                      onClick={e => { e.preventDefault(); e.stopPropagation(); addCart(s); }}
-                      onMouseEnter={e => (e.currentTarget.style.background = "#B91C1C")}
-                      onMouseLeave={e => (e.currentTarget.style.background = "#DC2626")}
-                    >Add to Cart</button>
-                  </div>
+                  {openCardId === `s-${s.id}` ? (
+                    <div onClick={e => { e.preventDefault(); e.stopPropagation(); }}>
+                      <div style={{ fontSize: 10, fontWeight: 700, fontFamily: F, letterSpacing: 1, textTransform: "uppercase", color: "#888", marginBottom: 6 }}>
+                        Color: <span style={{ color: "#DC2626" }}>{cardColor}</span>
+                      </div>
+                      <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 10 }}>
+                        {s.colorOptions!.map(c => (
+                          <button key={c.name} title={c.name}
+                            onClick={e => { e.preventDefault(); e.stopPropagation(); setCardColor(c.name); }}
+                            style={{ width: 26, height: 26, borderRadius: "50%", background: c.hex, border: cardColor === c.name ? "3px solid #DC2626" : "2px solid #ddd", cursor: "pointer", boxShadow: cardColor === c.name ? "0 0 0 2px #fff, 0 0 0 3px #DC2626" : "none", outline: "none", padding: 0, transition: "all .15s" }}
+                          />
+                        ))}
+                      </div>
+                      <div style={{ display: "flex", gap: 6 }}>
+                        <button onClick={e => { e.preventDefault(); e.stopPropagation(); setOpenCardId(null); }}
+                          style={{ flex: 1, background: "#F3F4F6", color: "#555", border: "1px solid #E5E7EB", borderRadius: 8, padding: "8px 0", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: F }}>Cancel</button>
+                        <button onClick={e => { e.preventDefault(); e.stopPropagation(); addCart(s, cardColor); setOpenCardId(null); }}
+                          style={{ flex: 2, background: "#DC2626", color: "#fff", border: "none", borderRadius: 8, padding: "8px 0", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: F, letterSpacing: 1 }}>Add to Cart</button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                      <div style={{ fontSize: 24, fontWeight: 800, fontFamily: F }}>${s.price}</div>
+                      <button
+                        style={{ background: "#DC2626", color: "#fff", border: "none", borderRadius: 10, padding: "8px 18px", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: F, letterSpacing: 1, textTransform: "uppercase", transition: "all .3s" }}
+                        onClick={e => { e.preventDefault(); e.stopPropagation(); (s.colorOptions?.length ?? 0) > 0 ? openPicker(`s-${s.id}`, s.colorOptions![0].name) : addCart(s); }}
+                        onMouseEnter={e => (e.currentTarget.style.background = "#B91C1C")}
+                        onMouseLeave={e => (e.currentTarget.style.background = "#DC2626")}
+                      >Add to Cart</button>
+                    </div>
+                  )}
                 </div>
               </div>
             </Link>
@@ -387,15 +417,37 @@ export function HomeClient() {
                     </div>
                     <h3 style={{ fontSize: 17, fontWeight: 700, fontFamily: F, marginBottom: 4, color: "#111" }}>{a.name}</h3>
                     <p style={{ fontSize: 13, color: "#888", lineHeight: 1.5, marginBottom: 14, flex: 1 }}>{a.desc}</p>
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                      <span style={{ fontSize: 20, fontWeight: 800, fontFamily: F }}>${a.price}</span>
-                      <button
-                        style={{ background: "#DC2626", color: "#fff", border: "none", borderRadius: 10, padding: "7px 16px", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: F, letterSpacing: 1, textTransform: "uppercase", transition: "all .3s" }}
-                        onClick={e => { e.preventDefault(); e.stopPropagation(); addCart(a); }}
-                        onMouseEnter={e => (e.currentTarget.style.background = "#B91C1C")}
-                        onMouseLeave={e => (e.currentTarget.style.background = "#DC2626")}
-                      >Add to Cart</button>
-                    </div>
+                    {openCardId === `a-${a.id}` ? (
+                      <div onClick={e => { e.preventDefault(); e.stopPropagation(); }}>
+                        <div style={{ fontSize: 10, fontWeight: 700, fontFamily: F, letterSpacing: 1, textTransform: "uppercase", color: "#888", marginBottom: 6 }}>
+                          Color: <span style={{ color: "#DC2626" }}>{cardColor}</span>
+                        </div>
+                        <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 10 }}>
+                          {a.colorOptions!.map(c => (
+                            <button key={c.name} title={c.name}
+                              onClick={e => { e.preventDefault(); e.stopPropagation(); setCardColor(c.name); }}
+                              style={{ width: 26, height: 26, borderRadius: "50%", background: c.hex, border: cardColor === c.name ? "3px solid #DC2626" : "2px solid #ddd", cursor: "pointer", boxShadow: cardColor === c.name ? "0 0 0 2px #fff, 0 0 0 3px #DC2626" : "none", outline: "none", padding: 0, transition: "all .15s" }}
+                            />
+                          ))}
+                        </div>
+                        <div style={{ display: "flex", gap: 6 }}>
+                          <button onClick={e => { e.preventDefault(); e.stopPropagation(); setOpenCardId(null); }}
+                            style={{ flex: 1, background: "#F3F4F6", color: "#555", border: "1px solid #E5E7EB", borderRadius: 8, padding: "7px 0", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: F }}>Cancel</button>
+                          <button onClick={e => { e.preventDefault(); e.stopPropagation(); addCart(a, cardColor); setOpenCardId(null); }}
+                            style={{ flex: 2, background: "#DC2626", color: "#fff", border: "none", borderRadius: 8, padding: "7px 0", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: F, letterSpacing: 1 }}>Add to Cart</button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                        <span style={{ fontSize: 20, fontWeight: 800, fontFamily: F }}>${a.price}</span>
+                        <button
+                          style={{ background: "#DC2626", color: "#fff", border: "none", borderRadius: 10, padding: "7px 16px", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: F, letterSpacing: 1, textTransform: "uppercase", transition: "all .3s" }}
+                          onClick={e => { e.preventDefault(); e.stopPropagation(); (a.colorOptions?.length ?? 0) > 0 ? openPicker(`a-${a.id}`, a.colorOptions![0].name) : addCart(a); }}
+                          onMouseEnter={e => (e.currentTarget.style.background = "#B91C1C")}
+                          onMouseLeave={e => (e.currentTarget.style.background = "#DC2626")}
+                        >Add to Cart</button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </Link>
