@@ -25,6 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <CartDrawer />
         <Toaster
           position="top-right"
+          containerStyle={{ top: 84 }}
           toastOptions={{
             style: {
               background: "#DC2626",

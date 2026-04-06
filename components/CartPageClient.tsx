@@ -1,16 +1,56 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useStore } from "@/lib/store";
 import { ACCESSORIES, BRANCHES } from "@/lib/data";
 import { ScooterSVG, AccSVG } from "@/components/ScooterSVG";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 const F = "'Oswald', sans-serif";
 
+// Color popup for recommendation cards
+function ColorPopup({ item, onAdd, onClose }: {
+  item: typeof ACCESSORIES[0];
+  onAdd: (color: string) => void;
+  onClose: () => void;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [sel, setSel] = useState(item.colorOptions?.[0]?.name ?? "");
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) onClose();
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [onClose]);
+
+  return (
+    <div ref={ref} style={{ position: "absolute", bottom: "calc(100% + 8px)", right: 0, background: "#fff", border: "1px solid #E5E7EB", borderRadius: 12, padding: 14, boxShadow: "0 8px 24px rgba(0,0,0,.12)", zIndex: 20, minWidth: 160 }}>
+      <div style={{ fontSize: 11, fontWeight: 700, fontFamily: F, letterSpacing: 1, textTransform: "uppercase", color: "#555", marginBottom: 8 }}>
+        Color: <span style={{ color: "#111" }}>{sel}</span>
+      </div>
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 10 }}>
+        {item.colorOptions!.map(c => (
+          <button key={c.name} title={c.name} onClick={() => setSel(c.name)}
+            style={{ width: 28, height: 28, borderRadius: "50%", background: c.hex, border: sel === c.name ? "3px solid #DC2626" : "2px solid #E5E7EB", cursor: "pointer", boxShadow: sel === c.name ? "0 0 0 2px #fff, 0 0 0 3px #DC2626" : "none", outline: "none", padding: 0, transition: "all .15s" }}
+          />
+        ))}
+      </div>
+      <button onClick={() => onAdd(sel)}
+        style={{ width: "100%", background: "#DC2626", color: "#fff", border: "none", borderRadius: 8, padding: "8px 0", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: F, letterSpacing: 1 }}
+      >Add to Cart</button>
+      {/* small arrow */}
+      <div style={{ position: "absolute", bottom: -6, right: 20, width: 12, height: 12, background: "#fff", border: "1px solid #E5E7EB", transform: "rotate(45deg)", borderTop: "none", borderLeft: "none" }} />
+    </div>
+  );
+}
+
 export function CartPageClient() {
-  const { cart, removeFromCart, updateQuantity, cartTotal, clearCart } = useStore();
+  const { cart, removeFromCart, updateQuantity, cartTotal, addToCart } = useStore();
   const [branch, setBranch] = useState<string | null>(null);
+  const [openPopup, setOpenPopup] = useState<number | null>(null);
   const router = useRouter();
 
   const cc = cart.reduce((s, c) => s + c.quantity, 0);
@@ -25,26 +65,50 @@ export function CartPageClient() {
     window.open(`https://wa.me/${b.wa}?text=${encodeURIComponent(msg)}`, "_blank");
   };
 
-  // Smart recommendations
+  const handleAddRec = (item: typeof ACCESSORIES[0], color: string) => {
+    addToCart({ id: String(item.id), name: item.name, price: item.price, type: "accessory", slug: String(item.id), color: color || undefined });
+    toast.success(`${item.name}${color ? ` (${color})` : ""} added to cart`);
+    setOpenPopup(null);
+  };
+
+  // Smart recommendations — comprehensive rules covering every product
   const cartIds = cart.map(c => Number(c.id));
   const hasScooter = cart.some(c => c.type === "scooter");
   const hasCat = (cat: string) => cart.some(c => {
     const acc = ACCESSORIES.find(a => String(a.id) === c.id);
     return acc?.cat === cat;
   });
+  const hasId = (id: number) => cartIds.includes(id);
 
   const rules: [boolean, number[], string][] = [
-    [hasScooter, [101, 102], "Protect your head"],
-    [hasScooter, [103], "Better grip, safer ride"],
-    [hasScooter, [104], "Essential body protection"],
-    [hasScooter, [106], "Keep it secure"],
-    [hasScooter, [105], "Navigate hands-free"],
-    [hasScooter, [107], "Stay visible at night"],
-    [hasScooter, [108], "Carry it anywhere"],
-    [hasCat("Protection") && !hasScooter, [103, 104], "Complete your safety gear"],
-    [cartIds.includes(101) || cartIds.includes(102), [103, 104], "Complete your safety gear"],
-    [cartIds.includes(109), [110, 111, 112], "While you're replacing parts"],
-    [cartIds.includes(110), [109, 111], "Common maintenance bundle"],
+    // Scooter → safety + gear
+    [hasScooter,                                   [101, 102],       "Protect your head"],
+    [hasScooter,                                   [103],            "Better grip, safer ride"],
+    [hasScooter,                                   [104],            "Essential body protection"],
+    [hasScooter,                                   [106],            "Keep it secure"],
+    [hasScooter,                                   [105],            "Navigate hands-free"],
+    [hasScooter,                                   [107],            "Stay visible at night"],
+    [hasScooter,                                   [108],            "Carry it anywhere"],
+    // Protection items → cross-sell others
+    [hasId(101) || hasId(102),                     [103, 104],       "Complete your safety gear"],
+    [hasId(103),                                   [101, 104],       "Complete your safety gear"],
+    [hasId(104),                                   [101, 103],       "Complete your safety gear"],
+    // Gear → related gear
+    [hasId(105),                                   [107, 108, 106],  "Upgrade your ride setup"],
+    [hasId(106),                                   [108, 107, 105],  "Complete your security kit"],
+    [hasId(107),                                   [105, 106],       "Pair with your LED kit"],
+    [hasId(108),                                   [106, 107, 105],  "Pair with your carry bag"],
+    // Parts → related parts
+    [hasId(109),                                   [110, 111, 112],  "While you're replacing parts"],
+    [hasId(110),                                   [109, 111],       "Common maintenance bundle"],
+    [hasId(111),                                   [109, 110, 112],  "Common maintenance bundle"],
+    [hasId(112),                                   [109, 110, 111],  "Complete your toolkit"],
+    // Any accessory (no scooter) → suggest safety + gear
+    [hasCat("Protection") && !hasScooter,          [103, 104],       "Complete your safety gear"],
+    [hasCat("Gear") && !hasScooter && !hasCat("Protection"), [101, 103, 104], "Stay protected"],
+    [hasCat("Parts") && !hasScooter,               [106, 107, 105],  "Popular riding accessories"],
+    // Fallback: non-empty cart with no other triggers → popular picks
+    [cart.length > 0,                              [101, 106, 107, 105], "Popular picks"],
   ];
 
   const seen = new Set<number>();
@@ -56,9 +120,9 @@ export function CartPageClient() {
       const item = ACCESSORIES.find(a => a.id === id);
       if (item) { suggestions.push({ item, reason }); seen.add(id); }
     }
+    if (suggestions.length >= 4) break;
   }
   const shown = suggestions.slice(0, 4);
-
 
   return (
     <div>
@@ -93,7 +157,7 @@ export function CartPageClient() {
               const isScooter = c.type === "scooter";
               const numId = Number(c.id);
               return (
-                <div key={c.id} style={{ padding: "16px 0", borderBottom: "1px solid #F3F4F6" }}>
+                <div key={`${c.id}_${c.color}`} style={{ padding: "16px 0", borderBottom: "1px solid #F3F4F6" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                     <div style={{ width: 56, height: 56, background: "#F9FAFB", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, border: "1px solid #E5E7EB" }}>
                       {isScooter
@@ -148,12 +212,12 @@ export function CartPageClient() {
                 </div>
                 <div style={{ display: "flex", gap: 12, overflowX: "auto", paddingBottom: 4, scrollbarWidth: "none" }}>
                   {shown.map(({ item: sg, reason }) => (
-                    <div key={sg.id} onClick={() => router.push(`/accessories/${sg.id}`)}
-                      style={{ background: "#F9FAFB", border: "1px solid #E5E7EB", borderRadius: 12, padding: 14, cursor: "pointer", minWidth: 180, maxWidth: 200, flexShrink: 0, transition: "all .2s" }}
-                      onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = "#DC2626"; (e.currentTarget as HTMLDivElement).style.background = "#FEF2F2"; }}
-                      onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = "#E5E7EB"; (e.currentTarget as HTMLDivElement).style.background = "#F9FAFB"; }}
+                    <div key={sg.id}
+                      style={{ background: "#F9FAFB", border: "1px solid #E5E7EB", borderRadius: 12, padding: 14, minWidth: 180, maxWidth: 200, flexShrink: 0, position: "relative" }}
                     >
-                      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8, cursor: "pointer" }}
+                        onClick={() => router.push(`/accessories/${sg.id}`)}
+                      >
                         <div style={{ width: 36, height: 36, borderRadius: 8, background: "#fff", border: "1px solid #E5E7EB", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                           <AccSVG type={sg.cat} color={sg.color} itemId={sg.id} />
                         </div>
@@ -164,8 +228,21 @@ export function CartPageClient() {
                       </div>
                       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 4 }}>
                         <span style={{ fontFamily: F, fontWeight: 800, fontSize: 16 }}>${sg.price}</span>
-                        <span style={{ fontSize: 10, color: "#DC2626", fontWeight: 700, fontFamily: F, letterSpacing: 1 }}>VIEW →</span>
+                        <button
+                          onClick={e => {
+                            e.stopPropagation();
+                            if (sg.colorOptions && sg.colorOptions.length > 0) {
+                              setOpenPopup(openPopup === sg.id ? null : sg.id);
+                            } else {
+                              handleAddRec(sg, "");
+                            }
+                          }}
+                          style={{ background: "#DC2626", color: "#fff", border: "none", borderRadius: 8, padding: "6px 14px", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: F, letterSpacing: 1 }}
+                        >Add</button>
                       </div>
+                      {openPopup === sg.id && sg.colorOptions && (
+                        <ColorPopup item={sg} onAdd={(color) => handleAddRec(sg, color)} onClose={() => setOpenPopup(null)} />
+                      )}
                     </div>
                   ))}
                 </div>

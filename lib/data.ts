@@ -88,7 +88,7 @@ export const FAQS: FAQ[] = [
 ];
 
 export const BRANCHES: Branch[] = [
-  { name:"Borj Hammoud", phone:"79 185 184", wa:"96179185184", maps:"https://maps.app.goo.gl/ofXirR7QszdbcaVC8" },
+  { name:"Borj Hammoud", phone:"79 185 184", wa:"96179185184", maps:"https://maps.app.goo.gl/SbQqGEHTvahh9VGa7" },
   { name:"Zouk Mosbeh", phone:"81 185 184", wa:"96181185184", maps:"https://maps.app.goo.gl/oC9tSDxCDbzFVucD9" },
-  { name:"Amchit", phone:null, wa:"96179185184", maps:"https://maps.app.goo.gl/hEHLhMAJgcHgCiS8A" },
+  { name:"Amchit", phone:null, wa:"96179185184", maps:"https://maps.app.goo.gl/Gk7GWp8F9aSdHfMF6" },
 ];
