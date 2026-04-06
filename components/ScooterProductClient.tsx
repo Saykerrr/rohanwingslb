@@ -4,10 +4,28 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ScooterSVG, AccSVG } from "@/components/ScooterSVG";
 import { useStore } from "@/lib/store";
-import { SCOOTERS, type Scooter, type Accessory } from "@/lib/data";
+import { SCOOTERS, type Scooter, type Accessory, type ColorOption } from "@/lib/data";
 import toast from "react-hot-toast";
 
 const F = "'Oswald', sans-serif";
+
+function ColorPicker({ options, selected, onSelect }: { options: ColorOption[]; selected: string; onSelect: (name: string) => void }) {
+  return (
+    <div style={{ marginTop: 20 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
+        <span style={{ fontSize: 13, fontWeight: 700, fontFamily: F, letterSpacing: 1, textTransform: "uppercase", color: "#555" }}>Color:</span>
+        <span style={{ fontSize: 13, fontWeight: 700, fontFamily: F, color: "#111" }}>{selected}</span>
+      </div>
+      <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+        {options.map(c => (
+          <button key={c.name} onClick={() => onSelect(c.name)} title={c.name}
+            style={{ width: 34, height: 34, borderRadius: "50%", background: c.hex, border: selected === c.name ? "3px solid #DC2626" : "2px solid #E5E7EB", cursor: "pointer", boxShadow: selected === c.name ? "0 0 0 2px #fff, 0 0 0 4px #DC2626" : "0 1px 3px rgba(0,0,0,.15)", transition: "all .2s", outline: "none", padding: 0 }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 interface Props {
   scooter: Scooter;
@@ -19,6 +37,7 @@ export function ScooterProductClient({ scooter: p, related, accessories }: Props
   const [galIdx, setGalIdx] = useState(0);
   const [compareOpen, setCompareOpen] = useState(false);
   const [cmpSearch, setCmpSearch] = useState("");
+  const [selectedColor, setSelectedColor] = useState(p.colorOptions?.[0]?.name ?? "");
   const { addToCart } = useStore();
   const router = useRouter();
 
@@ -41,7 +60,8 @@ export function ScooterProductClient({ scooter: p, related, accessories }: Props
   };
 
   const handleWhatsApp = () => {
-    const m = `Hi! I'm interested in the ${p.name} ($${p.price}). Is it available?`;
+    const colorPart = selectedColor ? ` – Color: ${selectedColor}` : "";
+    const m = `Hi! I'm interested in the ${p.name}${colorPart} ($${p.price}). Is it available?`;
     window.open(`https://wa.me/96179185184?text=${encodeURIComponent(m)}`, "_blank");
   };
 
@@ -96,6 +116,10 @@ export function ScooterProductClient({ scooter: p, related, accessories }: Props
             <h1 style={{ fontSize: 36, fontWeight: 800, fontFamily: F, marginTop: 4, textTransform: "uppercase" }}>{p.name}</h1>
             <div style={{ fontSize: 32, fontWeight: 800, fontFamily: F, color: "#DC2626", marginTop: 10 }}>${p.price}</div>
             <p style={{ color: "#555", fontSize: 15, lineHeight: 1.7, marginTop: 18 }}>{p.full || p.desc}</p>
+
+            {p.colorOptions && p.colorOptions.length > 0 && (
+              <ColorPicker options={p.colorOptions} selected={selectedColor} onSelect={setSelectedColor} />
+            )}
 
             <div style={{ display: "flex", gap: 12, marginTop: 28, flexWrap: "wrap" }}>
               <button onClick={handleAddToCart}

@@ -372,13 +372,13 @@ export function HomeClient() {
           </div>
           <div className="pg" style={{ gridTemplateColumns: "repeat(auto-fill,minmax(250px,1fr))", gap: 16 }}>
             {fAcc.slice(0, accVisible).map((a, i) => (
-              <Link key={a.id} href={`/accessories/${a.id}`} style={{ textDecoration: "none" }}>
+              <Link key={a.id} href={`/accessories/${a.id}`} style={{ textDecoration: "none", display: "flex" }}>
                 <div
-                  style={{ background: "#fff", border: "1px solid #E5E7EB", borderRadius: 16, overflow: "hidden", cursor: "pointer", transition: "all .35s ease" }}
+                  style={{ background: "#fff", border: "1px solid #E5E7EB", borderRadius: 16, overflow: "hidden", cursor: "pointer", transition: "all .35s ease", display: "flex", flexDirection: "column", width: "100%" }}
                   onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = "#DC2626"; (e.currentTarget as HTMLDivElement).style.transform = "translateY(-4px)"; (e.currentTarget as HTMLDivElement).style.boxShadow = "0 12px 40px rgba(220,38,38,.1)"; }}
                   onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = "#E5E7EB"; (e.currentTarget as HTMLDivElement).style.transform = "none"; (e.currentTarget as HTMLDivElement).style.boxShadow = "none"; }}
                 >
-                  <div style={{ padding: 20 }}>
+                  <div style={{ padding: 20, display: "flex", flexDirection: "column", flex: 1 }}>
                     <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 10 }}>
                       <div style={{ width: 44, height: 44, borderRadius: 10, background: "#FEF2F2", display: "flex", alignItems: "center", justifyContent: "center" }}>
                         <AccSVG type={a.cat} color={a.color} itemId={a.id} />
@@ -386,7 +386,7 @@ export function HomeClient() {
                       <span style={{ fontSize: 10, color: "#DC2626", fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", fontFamily: F }}>{a.cat}</span>
                     </div>
                     <h3 style={{ fontSize: 17, fontWeight: 700, fontFamily: F, marginBottom: 4, color: "#111" }}>{a.name}</h3>
-                    <p style={{ fontSize: 13, color: "#888", lineHeight: 1.5, marginBottom: 14 }}>{a.desc}</p>
+                    <p style={{ fontSize: 13, color: "#888", lineHeight: 1.5, marginBottom: 14, flex: 1 }}>{a.desc}</p>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                       <span style={{ fontSize: 20, fontWeight: 800, fontFamily: F }}>${a.price}</span>
                       <button

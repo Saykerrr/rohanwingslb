@@ -95,13 +95,13 @@ h1, h2, h3, h4, h5, h6 {
   50% { opacity: 0.5; }
 }
 
-/* Smooth page entry */
+/* Smooth page entry — opacity only, no transform (transform breaks position:fixed children) */
 main > * {
-  animation: pageFade 0.2s ease-out both;
+  animation: pageFade 0.25s ease-out both;
 }
 @keyframes pageFade {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* Animations */
