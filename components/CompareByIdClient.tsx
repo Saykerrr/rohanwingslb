@@ -97,7 +97,7 @@ export function CompareByIdClient() {
               </div>
               {/* Bottom: action buttons always aligned */}
               <div style={{ marginTop: 16 }}>
-                <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 8 }}>
+                <div className="cmp-btns" style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 8 }}>
                   <button
                     onClick={() => addCart(s)}
                     style={{ background: "#DC2626", color: "#fff", border: "none", borderRadius: 8, padding: "8px 16px", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: F, letterSpacing: 1, textTransform: "uppercase" }}
