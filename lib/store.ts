@@ -12,6 +12,7 @@ export interface CartItem {
   quantity: number;
   type: "scooter" | "accessory";
   slug: string;
+  color?: string;
 }
 
 export interface CompareItem {
@@ -68,11 +69,11 @@ export const useStore = create<Store>()(
       // Cart
       cart: [],
       addToCart: (item) => {
-        const existing = get().cart.find((i) => i.id === item.id);
+        const existing = get().cart.find((i) => i.id === item.id && i.color === item.color);
         if (existing) {
           set({
             cart: get().cart.map((i) =>
-              i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+              i.id === item.id && i.color === item.color ? { ...i, quantity: i.quantity + 1 } : i
             ),
           });
         } else {
@@ -80,7 +81,7 @@ export const useStore = create<Store>()(
         }
       },
       removeFromCart: (id) =>
-        set({ cart: get().cart.filter((i) => i.id !== id) }),
+        set({ cart: get().cart.filter((i) => !(i.id === id)) }),
       updateQuantity: (id, quantity) => {
         if (quantity <= 0) {
           get().removeFromCart(id);

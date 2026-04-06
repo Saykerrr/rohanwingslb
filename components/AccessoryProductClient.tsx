@@ -40,8 +40,8 @@ export function AccessoryProductClient({ accessory: acc, related }: Props) {
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
   const handleAddToCart = () => {
-    addToCart({ id: String(acc.id), name: acc.name, price: acc.price, type: "accessory", slug: String(acc.id) });
-    toast.success(`${acc.name} added to cart`);
+    addToCart({ id: String(acc.id), name: acc.name, price: acc.price, type: "accessory", slug: String(acc.id), color: selectedColor || undefined });
+    toast.success(`${acc.name}${selectedColor ? ` (${selectedColor})` : ""} added to cart`);
   };
 
   const handleWhatsApp = () => {

@@ -486,16 +486,14 @@ export function HomeClient() {
 
 
       {/* Back to top */}
-      {showTop && (
-        <button
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          style={{ position: "fixed", bottom: 24, right: 24, zIndex: 80, width: 44, height: 44, borderRadius: 22, background: "#DC2626", border: "none", cursor: "pointer", boxShadow: "0 4px 16px rgba(220,38,38,.3)", display: "flex", alignItems: "center", justifyContent: "center", transition: "all .3s" }}
-          onMouseEnter={e => (e.currentTarget.style.background = "#B91C1C")}
-          onMouseLeave={e => (e.currentTarget.style.background = "#DC2626")}
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5"><path d="M18 15l-6-6-6 6"/></svg>
-        </button>
-      )}
+      <button
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        style={{ position: "fixed", bottom: 24, right: 24, zIndex: 80, width: 44, height: 44, borderRadius: 22, background: "#DC2626", border: "none", cursor: showTop ? "pointer" : "default", boxShadow: "0 4px 16px rgba(220,38,38,.3)", display: "flex", alignItems: "center", justifyContent: "center", transition: "opacity .35s ease, transform .35s ease, background .2s", opacity: showTop ? 1 : 0, transform: showTop ? "translateY(0)" : "translateY(12px)", pointerEvents: showTop ? "auto" : "none" }}
+        onMouseEnter={e => (e.currentTarget.style.background = "#B91C1C")}
+        onMouseLeave={e => (e.currentTarget.style.background = "#DC2626")}
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5"><path d="M18 15l-6-6-6 6"/></svg>
+      </button>
     </div>
   );
 }

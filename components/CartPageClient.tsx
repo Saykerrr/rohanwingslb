@@ -20,7 +20,7 @@ export function CartPageClient() {
     if (!branch) return;
     const b = BRANCHES.find(x => x.name === branch);
     if (!b) return;
-    const lines = cart.map(c => `• ${c.name} x${c.quantity} — $${(c.price * c.quantity)}`).join("\n");
+    const lines = cart.map(c => `• ${c.name}${c.color ? ` (${c.color})` : ""} x${c.quantity} — $${(c.price * c.quantity)}`).join("\n");
     const msg = `Hi! I'd like to order from the ${branch} branch:\n\n${lines}\n\nTotal: $${ct}`;
     window.open(`https://wa.me/${b.wa}?text=${encodeURIComponent(msg)}`, "_blank");
   };
@@ -59,10 +59,6 @@ export function CartPageClient() {
   }
   const shown = suggestions.slice(0, 4);
 
-  const { addToCart } = useStore();
-  const addAcc = (item: typeof ACCESSORIES[0]) => {
-    addToCart({ id: String(item.id), name: item.name, price: item.price, type: "accessory", slug: String(item.id) });
-  };
 
   return (
     <div>
@@ -107,7 +103,10 @@ export function CartPageClient() {
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <h4 style={{ fontSize: 15, fontWeight: 700, fontFamily: F, margin: 0 }}>{c.name}</h4>
-                      <span style={{ fontSize: 12, color: "#888" }}>${c.price} each</span>
+                      <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 2 }}>
+                        {c.color && <span style={{ fontSize: 11, color: "#DC2626", fontWeight: 600, fontFamily: F }}>{c.color}</span>}
+                        <span style={{ fontSize: 12, color: "#888" }}>${c.price} each</span>
+                      </div>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
                       <span style={{ fontSize: 20, fontWeight: 800, fontFamily: F }}>${c.price * c.quantity}</span>
@@ -149,7 +148,7 @@ export function CartPageClient() {
                 </div>
                 <div style={{ display: "flex", gap: 12, overflowX: "auto", paddingBottom: 4, scrollbarWidth: "none" }}>
                   {shown.map(({ item: sg, reason }) => (
-                    <div key={sg.id} onClick={() => addAcc(sg)}
+                    <div key={sg.id} onClick={() => router.push(`/accessories/${sg.id}`)}
                       style={{ background: "#F9FAFB", border: "1px solid #E5E7EB", borderRadius: 12, padding: 14, cursor: "pointer", minWidth: 180, maxWidth: 200, flexShrink: 0, transition: "all .2s" }}
                       onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = "#DC2626"; (e.currentTarget as HTMLDivElement).style.background = "#FEF2F2"; }}
                       onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = "#E5E7EB"; (e.currentTarget as HTMLDivElement).style.background = "#F9FAFB"; }}
@@ -165,10 +164,7 @@ export function CartPageClient() {
                       </div>
                       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 4 }}>
                         <span style={{ fontFamily: F, fontWeight: 800, fontSize: 16 }}>${sg.price}</span>
-                        <button
-                          style={{ background: "#DC2626", color: "#fff", border: "none", borderRadius: 8, padding: "6px 14px", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: F, letterSpacing: 1 }}
-                          onClick={e => { e.stopPropagation(); addAcc(sg); }}
-                        >Add</button>
+                        <span style={{ fontSize: 10, color: "#DC2626", fontWeight: 700, fontFamily: F, letterSpacing: 1 }}>VIEW →</span>
                       </div>
                     </div>
                   ))}

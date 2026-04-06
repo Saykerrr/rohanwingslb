@@ -55,8 +55,8 @@ export function ScooterProductClient({ scooter: p, related, accessories }: Props
     : SCOOTERS.filter(s => s.id !== p.id);
 
   const handleAddToCart = () => {
-    addToCart({ id: String(p.id), name: p.name, price: p.price, type: "scooter", slug: String(p.id) });
-    toast.success(`${p.name} added to cart`);
+    addToCart({ id: String(p.id), name: p.name, price: p.price, type: "scooter", slug: String(p.id), color: selectedColor || undefined });
+    toast.success(`${p.name}${selectedColor ? ` (${selectedColor})` : ""} added to cart`);
   };
 
   const handleWhatsApp = () => {
