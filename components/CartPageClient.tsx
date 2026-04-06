@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { useStore } from "@/lib/store";
 import { ACCESSORIES, BRANCHES } from "@/lib/data";
 import { ScooterSVG, AccSVG } from "@/components/ScooterSVG";
@@ -9,48 +9,11 @@ import toast from "react-hot-toast";
 
 const F = "'Oswald', sans-serif";
 
-// Color popup for recommendation cards
-function ColorPopup({ item, onAdd, onClose }: {
-  item: typeof ACCESSORIES[0];
-  onAdd: (color: string) => void;
-  onClose: () => void;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [sel, setSel] = useState(item.colorOptions?.[0]?.name ?? "");
-
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) onClose();
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, [onClose]);
-
-  return (
-    <div ref={ref} style={{ position: "absolute", bottom: "calc(100% + 8px)", right: 0, background: "#fff", border: "1px solid #E5E7EB", borderRadius: 12, padding: 14, boxShadow: "0 8px 24px rgba(0,0,0,.12)", zIndex: 20, minWidth: 160 }}>
-      <div style={{ fontSize: 11, fontWeight: 700, fontFamily: F, letterSpacing: 1, textTransform: "uppercase", color: "#555", marginBottom: 8 }}>
-        Color: <span style={{ color: "#111" }}>{sel}</span>
-      </div>
-      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 10 }}>
-        {item.colorOptions!.map(c => (
-          <button key={c.name} title={c.name} onClick={() => setSel(c.name)}
-            style={{ width: 28, height: 28, borderRadius: "50%", background: c.hex, border: sel === c.name ? "3px solid #DC2626" : "2px solid #E5E7EB", cursor: "pointer", boxShadow: sel === c.name ? "0 0 0 2px #fff, 0 0 0 3px #DC2626" : "none", outline: "none", padding: 0, transition: "all .15s" }}
-          />
-        ))}
-      </div>
-      <button onClick={() => onAdd(sel)}
-        style={{ width: "100%", background: "#DC2626", color: "#fff", border: "none", borderRadius: 8, padding: "8px 0", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: F, letterSpacing: 1 }}
-      >Add to Cart</button>
-      {/* small arrow */}
-      <div style={{ position: "absolute", bottom: -6, right: 20, width: 12, height: 12, background: "#fff", border: "1px solid #E5E7EB", transform: "rotate(45deg)", borderTop: "none", borderLeft: "none" }} />
-    </div>
-  );
-}
-
 export function CartPageClient() {
   const { cart, removeFromCart, updateQuantity, cartTotal, addToCart } = useStore();
   const [branch, setBranch] = useState<string | null>(null);
   const [openPopup, setOpenPopup] = useState<number | null>(null);
+  const [popupColor, setPopupColor] = useState<string>("");
   const router = useRouter();
 
   const cc = cart.reduce((s, c) => s + c.quantity, 0);
@@ -63,6 +26,11 @@ export function CartPageClient() {
     const lines = cart.map(c => `• ${c.name}${c.color ? ` (${c.color})` : ""} x${c.quantity} — $${(c.price * c.quantity)}`).join("\n");
     const msg = `Hi! I'd like to order from the ${branch} branch:\n\n${lines}\n\nTotal: $${ct}`;
     window.open(`https://wa.me/${b.wa}?text=${encodeURIComponent(msg)}`, "_blank");
+  };
+
+  const openColorPicker = (item: typeof ACCESSORIES[0]) => {
+    setPopupColor(item.colorOptions?.[0]?.name ?? "");
+    setOpenPopup(item.id);
   };
 
   const handleAddRec = (item: typeof ACCESSORIES[0], color: string) => {
@@ -210,41 +178,67 @@ export function CartPageClient() {
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
                   <span style={{ fontFamily: F, fontWeight: 700, fontSize: 15, letterSpacing: 1 }}>Recommended for you</span>
                 </div>
+
+                {/* Overlay to close popup when clicking outside */}
+                {openPopup !== null && (
+                  <div onClick={() => setOpenPopup(null)} style={{ position: "fixed", inset: 0, zIndex: 15 }} />
+                )}
+
                 <div style={{ display: "flex", gap: 12, overflowX: "auto", paddingBottom: 4, scrollbarWidth: "none" }}>
-                  {shown.map(({ item: sg, reason }) => (
-                    <div key={sg.id}
-                      style={{ background: "#F9FAFB", border: "1px solid #E5E7EB", borderRadius: 12, padding: 14, minWidth: 180, maxWidth: 200, flexShrink: 0, position: "relative" }}
-                    >
-                      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8, cursor: "pointer" }}
-                        onClick={() => router.push(`/accessories/${sg.id}`)}
-                      >
-                        <div style={{ width: 36, height: 36, borderRadius: 8, background: "#fff", border: "1px solid #E5E7EB", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                          <AccSVG type={sg.cat} color={sg.color} itemId={sg.id} />
+                  {shown.map(({ item: sg, reason }) => {
+                    const isOpen = openPopup === sg.id;
+                    const opts = sg.colorOptions ?? [];
+                    return (
+                      <div key={sg.id} style={{ background: "#F9FAFB", border: `1px solid ${isOpen ? "#DC2626" : "#E5E7EB"}`, borderRadius: 12, padding: 14, minWidth: 180, maxWidth: 200, flexShrink: 0, position: "relative", transition: "border-color .2s" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8, cursor: "pointer" }}
+                          onClick={() => router.push(`/accessories/${sg.id}`)}
+                        >
+                          <div style={{ width: 36, height: 36, borderRadius: 8, background: "#fff", border: "1px solid #E5E7EB", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                            <AccSVG type={sg.cat} color={sg.color} itemId={sg.id} />
+                          </div>
+                          <div>
+                            <div style={{ fontFamily: F, fontWeight: 700, fontSize: 13 }}>{sg.name}</div>
+                            <div style={{ fontSize: 10, color: "#DC2626", fontWeight: 600, fontFamily: F }}>{reason}</div>
+                          </div>
                         </div>
-                        <div>
-                          <div style={{ fontFamily: F, fontWeight: 700, fontSize: 13 }}>{sg.name}</div>
-                          <div style={{ fontSize: 10, color: "#DC2626", fontWeight: 600, fontFamily: F }}>{reason}</div>
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 4 }}>
+                          <span style={{ fontFamily: F, fontWeight: 800, fontSize: 16 }}>${sg.price}</span>
+                          <button
+                            onClick={() => {
+                              if (opts.length > 0) {
+                                openColorPicker(sg);
+                              } else {
+                                handleAddRec(sg, "");
+                              }
+                            }}
+                            style={{ background: "#DC2626", color: "#fff", border: "none", borderRadius: 8, padding: "6px 14px", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: F, letterSpacing: 1 }}
+                          >Add</button>
                         </div>
+
+                        {/* Inline color picker popup */}
+                        {isOpen && opts.length > 0 && (
+                          <div onClick={e => e.stopPropagation()} style={{ position: "absolute", bottom: "calc(100% + 8px)", right: 0, background: "#fff", border: "1px solid #E5E7EB", borderRadius: 12, padding: 14, boxShadow: "0 8px 24px rgba(0,0,0,.14)", zIndex: 20, minWidth: 170 }}>
+                            <div style={{ fontSize: 11, fontWeight: 700, fontFamily: F, letterSpacing: 1, textTransform: "uppercase", color: "#555", marginBottom: 8 }}>
+                              Color: <span style={{ color: "#111" }}>{popupColor}</span>
+                            </div>
+                            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 10 }}>
+                              {opts.map(c => (
+                                <button key={c.name} title={c.name}
+                                  onClick={() => setPopupColor(c.name)}
+                                  style={{ width: 28, height: 28, borderRadius: "50%", background: c.hex, border: popupColor === c.name ? "3px solid #DC2626" : "2px solid #E5E7EB", cursor: "pointer", boxShadow: popupColor === c.name ? "0 0 0 2px #fff, 0 0 0 3px #DC2626" : "none", outline: "none", padding: 0, transition: "all .15s" }}
+                                />
+                              ))}
+                            </div>
+                            <button
+                              onClick={() => handleAddRec(sg, popupColor)}
+                              style={{ width: "100%", background: "#DC2626", color: "#fff", border: "none", borderRadius: 8, padding: "8px 0", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: F, letterSpacing: 1 }}
+                            >Add to Cart</button>
+                            <div style={{ position: "absolute", bottom: -6, right: 22, width: 11, height: 11, background: "#fff", border: "1px solid #E5E7EB", transform: "rotate(45deg)", borderTop: "none", borderLeft: "none" }} />
+                          </div>
+                        )}
                       </div>
-                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 4 }}>
-                        <span style={{ fontFamily: F, fontWeight: 800, fontSize: 16 }}>${sg.price}</span>
-                        <button
-                          onClick={e => {
-                            e.stopPropagation();
-                            if (sg.colorOptions && sg.colorOptions.length > 0) {
-                              setOpenPopup(openPopup === sg.id ? null : sg.id);
-                            } else {
-                              handleAddRec(sg, "");
-                            }
-                          }}
-                          style={{ background: "#DC2626", color: "#fff", border: "none", borderRadius: 8, padding: "6px 14px", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: F, letterSpacing: 1 }}
-                        >Add</button>
-                      </div>
-                      {openPopup === sg.id && sg.colorOptions && (
-                        <ColorPopup item={sg} onAdd={(color) => handleAddRec(sg, color)} onClose={() => setOpenPopup(null)} />
-                      )}
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             )}
