@@ -21,20 +21,18 @@ export function Footer() {
     <footer style={{ background: "#111", color: "#fff", padding: "48px 32px 24px" }}>
       <div className="footer-grid" style={{ maxWidth: 1100, margin: "0 auto", marginBottom: 32 }}>
         {/* Brand */}
-        <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 10 }}>
           <Image
             src="/logo.png"
             alt="Rohan Wings"
-            width={96}
-            height={96}
-            style={{ borderRadius: 6, flexShrink: 0, alignSelf: "flex-start" }}
+            width={80}
+            height={80}
+            style={{ borderRadius: 8 }}
           />
-          <div>
-            <div style={{ fontFamily: F, fontWeight: 800, fontSize: 16, color: "#fff" }}>Rohan Wings Lebanon</div>
-            <p style={{ color: "#888", fontSize: 13, lineHeight: 1.6, marginTop: 8, marginBottom: 0 }}>
-              Lebanon&apos;s premier destination for electric scooters, parts, and service.
-            </p>
-          </div>
+          <div style={{ fontFamily: F, fontWeight: 800, fontSize: 16, color: "#fff" }}>Rohan Wings Lebanon</div>
+          <p style={{ color: "#888", fontSize: 13, lineHeight: 1.6, margin: 0 }}>
+            Lebanon&apos;s premier destination for electric scooters, parts, and service.
+          </p>
         </div>
 
         {/* Quick Links */}

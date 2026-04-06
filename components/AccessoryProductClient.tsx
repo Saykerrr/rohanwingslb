@@ -45,11 +45,11 @@ export function AccessoryProductClient({ accessory: acc, related }: Props) {
         </button>
 
         {/* Product */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40, marginBottom: 60 }} className="acc-detail-grid">
+        <div className="acc-detail-grid" style={{ display: "grid", gap: 40, marginBottom: 60 }}>
           {/* Visual */}
           <div style={{ background: "#F9FAFB", borderRadius: 20, border: "1px solid #E5E7EB", display: "flex", alignItems: "center", justifyContent: "center", minHeight: 280, position: "relative", overflow: "hidden" }}>
             <div style={{ position: "absolute", inset: 0, background: `radial-gradient(circle at 50% 60%, ${acc.color}18 0%, transparent 65%)` }} />
-            <div style={{ width: 120, height: 120, zIndex: 1 }}>
+            <div style={{ width: 140, height: 140, zIndex: 1, transform: "scale(3.5)", transformOrigin: "center" }}>
               <AccSVG type={acc.cat} color={acc.color} itemId={acc.id} />
             </div>
           </div>

@@ -156,7 +156,7 @@ export function Navbar() {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="mobile-menu-top" style={{ position: "fixed", left: 0, right: 0, zIndex: 99, background: "rgba(255,255,255,.98)", backdropFilter: "blur(20px)", padding: "16px 20px 24px", borderBottom: "1px solid #E5E7EB", display: "flex", flexDirection: "column", gap: 14, animation: "slideDown .2s ease" }} onClick={e => e.stopPropagation()}>
+        <div className="mobile-menu-top" style={{ position: "fixed", left: 0, right: 0, zIndex: 99, background: "rgba(255,255,255,.98)", backdropFilter: "blur(20px)", padding: "16px 20px 24px", borderBottom: "1px solid #E5E7EB", display: "flex", flexDirection: "column", gap: 14, animation: "slideDown .2s ease" }} onClick={e => { e.stopPropagation(); e.nativeEvent.stopImmediatePropagation(); }}>
           {/* Inline search in mobile menu */}
           <div style={{ position: "relative", marginBottom: 4 }}>
             <input

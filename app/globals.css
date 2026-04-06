@@ -35,6 +35,7 @@
 
 html {
   scroll-behavior: smooth;
+  background: #111; /* matches footer — prevents white flash on over-scroll */
 }
 
 body {
@@ -42,6 +43,7 @@ body {
   color: #111827;
   background: #ffffff;
   overflow-x: hidden;
+  overscroll-behavior-y: none;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -117,9 +119,9 @@ main > * {
 .acc-detail-grid {
   grid-template-columns: 1fr 1fr;
 }
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .acc-detail-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
   }
 }
 
