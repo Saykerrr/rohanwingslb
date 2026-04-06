@@ -25,9 +25,9 @@ export function Footer() {
           <Image
             src="/logo.png"
             alt="Rohan Wings"
-            width={80}
-            height={80}
-            style={{ borderRadius: 6, flexShrink: 0 }}
+            width={96}
+            height={96}
+            style={{ borderRadius: 6, flexShrink: 0, alignSelf: "flex-start" }}
           />
           <div>
             <div style={{ fontFamily: F, fontWeight: 800, fontSize: 16, color: "#fff" }}>Rohan Wings Lebanon</div>

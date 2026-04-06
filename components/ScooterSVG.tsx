@@ -1,4 +1,6 @@
-export function ScooterSVG({ variant = 0, accent = "#DC2626" }: { variant?: number; accent?: string }) {
+import { memo } from "react";
+
+export const ScooterSVG = memo(function ScooterSVG({ variant = 0, accent = "#DC2626" }: { variant?: number; accent?: string }) {
   const v = variant % 3;
 
   const variants = [
@@ -58,9 +60,9 @@ export function ScooterSVG({ variant = 0, accent = "#DC2626" }: { variant?: numb
       {variants[v]}
     </svg>
   );
-}
+});
 
-export function AccSVG({ type, color = "#DC2626", itemId = 0 }: { type: string; color?: string; itemId?: number }) {
+export const AccSVG = memo(function AccSVG({ type, color = "#DC2626", itemId = 0 }: { type: string; color?: string; itemId?: number }) {
   const icons: Record<number, React.ReactNode> = {
     101: <><path d="M20 6 C12 6 6 12 6 18 L6 22 L34 22 L34 18 C34 12 28 6 20 6Z" stroke={color} strokeWidth="2" fill="none"/><path d="M8 22 L8 26 C8 27 9 28 10 28 L30 28 C31 28 32 27 32 26 L32 22" stroke={color} strokeWidth="2" fill="none"/><line x1="6" y1="22" x2="34" y2="22" stroke={color} strokeWidth="2"/></>,
     102: <><path d="M20 8 C13 8 8 13 8 18 L8 20 L32 20 L32 18 C32 13 27 8 20 8Z" stroke={color} strokeWidth="2" fill="none"/><line x1="8" y1="20" x2="32" y2="20" stroke={color} strokeWidth="2"/><path d="M12 20 L10 26" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><path d="M28 20 L30 26" stroke={color} strokeWidth="1.5" strokeLinecap="round"/></>,
@@ -89,4 +91,4 @@ export function AccSVG({ type, color = "#DC2626", itemId = 0 }: { type: string; 
       {icon}
     </svg>
   );
-}
+});

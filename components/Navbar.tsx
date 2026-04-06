@@ -22,7 +22,7 @@ export function Navbar() {
 
   useEffect(() => {
     const h = () => setScrolled(window.scrollY > 60);
-    window.addEventListener("scroll", h);
+    window.addEventListener("scroll", h, { passive: true });
     return () => window.removeEventListener("scroll", h);
   }, []);
 
@@ -69,7 +69,7 @@ export function Navbar() {
       <nav className="main-nav" style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: scrolled ? "rgba(255,255,255,.97)" : "#fff", backdropFilter: "blur(12px)", borderBottom: "1px solid #E5E7EB", transition: "all .3s", padding: "6px 16px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         {/* Logo */}
         <div onClick={() => { router.push("/"); window.scrollTo({ top: 0, behavior: "smooth" }); }} style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
-          <Image src="/logo.png" alt="Rohan Wings" width={64} height={64} className="nav-logo" style={{ borderRadius: 4, display: "block" }} priority />
+          <Image src="/logo.png" alt="Rohan Wings" width={96} height={64} className="nav-logo" style={{ objectFit: "cover", borderRadius: 6, display: "block" }} priority />
           <div style={{ lineHeight: 1.1, whiteSpace: "nowrap" }}>
             <div style={{ fontFamily: F, fontWeight: 800, fontSize: 16, letterSpacing: 1.5, textTransform: "uppercase" }}>Rohan Wings</div>
             <div style={{ fontFamily: F, fontWeight: 600, fontSize: 10, color: "#DC2626", letterSpacing: 2, textTransform: "uppercase" }}>Lebanon</div>

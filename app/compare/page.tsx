@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function ComparePage() {
   return (
-    <div style={{ paddingTop: 76 }}>
+    <div>
       <Suspense fallback={<div style={{ padding: 32, textAlign: "center", color: "#888" }}>Loading comparison...</div>}>
         <CompareByIdClient />
       </Suspense>

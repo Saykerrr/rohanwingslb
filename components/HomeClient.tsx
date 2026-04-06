@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { SCOOTERS, ACCESSORIES, FAQS, BRANCHES, type Scooter, type Accessory } from "@/lib/data";
 import { ScooterSVG, AccSVG } from "@/components/ScooterSVG";
 import { useStore } from "@/lib/store";
@@ -157,7 +157,7 @@ export function HomeClient() {
 
   useEffect(() => {
     const h = () => setShowTop(window.scrollY > 500);
-    window.addEventListener("scroll", h);
+    window.addEventListener("scroll", h, { passive: true });
     return () => window.removeEventListener("scroll", h);
   }, []);
 
@@ -197,14 +197,18 @@ export function HomeClient() {
 
   const brands = ["All", ...Array.from(new Set(SCOOTERS.map(s => s.brand)))];
 
-  let fScoot = SCOOTERS.filter(s =>
-    (sf === "All" || s.cat === sf) &&
-    (brandFilter === "All" || s.brand === brandFilter)
-  );
-  fScoot = doSort(fScoot, sort) as Scooter[];
+  const fScoot = useMemo(() => {
+    const filtered = SCOOTERS.filter(s =>
+      (sf === "All" || s.cat === sf) &&
+      (brandFilter === "All" || s.brand === brandFilter)
+    );
+    return doSort(filtered, sort) as Scooter[];
+  }, [sf, brandFilter, sort]);
 
-  let fAcc = ACCESSORIES.filter(a => af === "All" || a.cat === af);
-  fAcc = doSort(fAcc, accSort) as Accessory[];
+  const fAcc = useMemo(() => {
+    const filtered = ACCESSORIES.filter(a => af === "All" || a.cat === af);
+    return doSort(filtered, accSort) as Accessory[];
+  }, [af, accSort]);
 
   return (
     <div style={{ background: "#fff", color: "#111", fontFamily: "'Inter',-apple-system,sans-serif", overflowX: "hidden" }}>
@@ -218,6 +222,7 @@ export function HomeClient() {
           muted
           loop
           playsInline
+          preload="metadata"
           style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }}
         >
           <source src="/homepagevideo.mp4" type="video/mp4" />
