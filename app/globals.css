@@ -115,6 +115,21 @@ main > * {
   animation: fadeIn 0.5s ease-in-out;
 }
 
+/* Compare page entry animation + layout */
+@keyframes compareIn {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.compare-wrap {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 28px 32px 64px;
+  animation: compareIn 0.32s ease-out both;
+}
+@media (max-width: 768px) {
+  .compare-wrap { padding: 20px 16px 48px !important; }
+}
+
 /* Accessory detail responsive grid */
 .acc-detail-grid {
   grid-template-columns: 1fr 1fr;

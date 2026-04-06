@@ -72,7 +72,7 @@ export function CompareByIdClient() {
 
   return (
     <div>
-      <div className="prod-wrap" style={{ maxWidth: 1000, margin: "0 auto", padding: "32px" }}>
+      <div className="compare-wrap">
         <button
           onClick={() => router.push(`/scooters/${a.id}`)}
           style={{ color: "#555", fontSize: 13, fontWeight: 600, letterSpacing: 2, textTransform: "uppercase", fontFamily: F, background: "none", border: "none", cursor: "pointer", marginBottom: 24, display: "inline-flex", alignItems: "center", gap: 6 }}
@@ -84,41 +84,41 @@ export function CompareByIdClient() {
         <h1 style={{ fontSize: 36, fontWeight: 800, fontFamily: F, textTransform: "uppercase", marginBottom: 24 }}>Compare Scooters</h1>
 
         {/* Scooter Headers */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 24 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 24, alignItems: "stretch" }}>
           {([a, b] as const).map((s, idx) => (
-            <div key={s.id} style={{ background: "#F9FAFB", borderRadius: 14, border: "1px solid #E5E7EB", padding: "16px 14px", textAlign: "center", position: "relative" }}>
-              <div style={{ width: 100, height: 70, margin: "0 auto" }}>
-                <ScooterSVG variant={s.id % 3} accent={s.color} />
+            <div key={s.id} style={{ background: "#F9FAFB", borderRadius: 14, border: "1px solid #E5E7EB", padding: "20px 16px 16px", textAlign: "center", display: "flex", flexDirection: "column" }}>
+              {/* Top: image + name — flex:1 pushes buttons to bottom */}
+              <div style={{ flex: 1 }}>
+                <div style={{ width: 100, height: 70, margin: "0 auto" }}>
+                  <ScooterSVG variant={s.id % 3} accent={s.color} />
+                </div>
+                <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: 17, marginTop: 10, lineHeight: 1.2 }}>{s.name}</h3>
+                <div style={{ fontSize: 22, fontWeight: 800, fontFamily: F, color: "#DC2626", marginTop: 6 }}>${s.price}</div>
               </div>
-              <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: 17, marginTop: 8 }}>{s.name}</h3>
-              {s.badge && (
-                <span style={{ display: "inline-block", background: "#DC2626", color: "#fff", fontSize: 9, fontWeight: 700, padding: "2px 8px", borderRadius: 20, marginTop: 4, fontFamily: F, letterSpacing: 1 }}>
-                  {s.badge}
-                </span>
-              )}
-              <div style={{ marginTop: 10, display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap" }}>
+              {/* Bottom: action buttons always aligned */}
+              <div style={{ marginTop: 16 }}>
+                <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 8 }}>
+                  <button
+                    onClick={() => addCart(s)}
+                    style={{ background: "#DC2626", color: "#fff", border: "none", borderRadius: 8, padding: "8px 16px", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: F, letterSpacing: 1, textTransform: "uppercase" }}
+                  >Add to Cart</button>
+                  <button
+                    onClick={() => router.push(`/scooters/${s.id}`)}
+                    style={{ background: "none", color: "#DC2626", border: "1px solid #DC2626", borderRadius: 8, padding: "8px 16px", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: F, letterSpacing: 1, textTransform: "uppercase" }}
+                  >Details</button>
+                </div>
                 <button
-                  onClick={() => addCart(s)}
-                  style={{ background: "#DC2626", color: "#fff", border: "none", borderRadius: 8, padding: "7px 14px", fontSize: 10, fontWeight: 700, cursor: "pointer", fontFamily: F, letterSpacing: 1, textTransform: "uppercase" }}
+                  onClick={() => setSwapIdx(swapIdx === idx ? null : idx as 0 | 1)}
+                  style={{ background: "none", border: "1px solid #E5E7EB", borderRadius: 8, padding: "6px 14px", cursor: "pointer", fontSize: 11, fontFamily: F, fontWeight: 600, color: "#555", display: "inline-flex", alignItems: "center", gap: 4, transition: "all .2s" }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#DC2626"; (e.currentTarget as HTMLButtonElement).style.color = "#DC2626"; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#E5E7EB"; (e.currentTarget as HTMLButtonElement).style.color = "#555"; }}
                 >
-                  Add to Cart
-                </button>
-                <button
-                  onClick={() => router.push(`/scooters/${s.id}`)}
-                  style={{ background: "none", color: "#DC2626", border: "1px solid #DC2626", borderRadius: 8, padding: "7px 14px", fontSize: 10, fontWeight: 700, cursor: "pointer", fontFamily: F, letterSpacing: 1, textTransform: "uppercase" }}
-                >
-                  Details
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/>
+                  </svg>
+                  Change
                 </button>
               </div>
-              <button
-                onClick={() => setSwapIdx(swapIdx === idx ? null : idx as 0 | 1)}
-                style={{ marginTop: 10, background: "none", border: "1px solid #E5E7EB", borderRadius: 8, padding: "5px 12px", cursor: "pointer", fontSize: 11, fontFamily: F, fontWeight: 600, color: "#DC2626", display: "inline-flex", alignItems: "center", gap: 4, transition: "all .2s" }}
-              >
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2">
-                  <path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/>
-                </svg>
-                Change
-              </button>
             </div>
           ))}
         </div>
